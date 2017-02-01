@@ -1,0 +1,15 @@
+{
+  "name": "arrivalscraper",
+  "version": "1.0.0",
+  "description": "scrapes the imdb arrival movie comments",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Christoph Honal",
+  "license": "GPL",
+  "dependencies": {
+    "cheerio": "^0.22.0",
+    "msexcel-builder": "0.0.2"
+  }
+}
