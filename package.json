@@ -10,6 +10,6 @@
   "license": "GPL",
   "dependencies": {
     "cheerio": "^0.22.0",
-    "msexcel-builder": "0.0.2"
+    "msexcel-builder": "github:chuanyi/msexcel-builder"
   }
 }

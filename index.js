@@ -2,14 +2,15 @@ var cheerio = require('cheerio');
 var fs = require('fs');
 var excelbuilder = require('msexcel-builder');
 
+fs.existsSync("./result") || fs.mkdirSync("./result");
 var workbook = excelbuilder.createWorkbook('./result', 'arrival_imdb_comments.xlsx')
-var sheet1 = workbook.createSheet('Arrival', 6, 770);
+var sheet1 = workbook.createSheet('Arrival', 7, 1032);
 
-var header = ["date", "ratingPercent", "usefulPercent", "from", "title", "text"];
+var header = ["date", "ratingPercent", "usefulPercent", "author", "from", "title", "text"];
 for(var k = 0; k < header.length; k++) sheet1.set(k + 1, 1, header[k]);
 
 var rowNumber = 0;
-for (var i = 0; i < 77; i++)
+for (var i = 0; i < 103; i++)
 {
     var htmlString = fs.readFileSync("data/" + i + ".html", 'utf8');
     console.log("Read file #" + i);
@@ -44,9 +45,10 @@ for (var i = 0; i < 77; i++)
         var day = parseInt(dateParts[0]);
         var year = parseInt(dateParts[2]);
         var month = (new Date(Date.parse(dateParts[1] +" 1, 2012"))).getMonth() + 1;
+        var author = meta.children("a").last().text();
         var cleanr = /[\u0000-\u0008\u000B-\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE-\uFFFF]/gi;
-        var entry = [day + "." + month + "." + year, ratingPercent.toString().replace(".", ","), 
-            usefulPercent.toString().replace(".", ","), from, title.replace(cleanr, ""), text.replace(cleanr, "")];
+        var entry = [year + "-" + month + "-" + day, ratingPercent.toString().replace(".", ","), 
+            usefulPercent.toString().replace(".", ","), author.replace(cleanr, ""), from.replace(cleanr, ""), title.replace(cleanr, ""), text.replace(cleanr, "")];
         for(var k = 0; k < entry.length; k++) sheet1.set(k + 1, rowNumber + 2, entry[k]);
         console.log("Extraced comment #" + j + " from file #" + i + " (comment #" + rowNumber + ")");
         rowNumber++;
@@ -55,6 +57,6 @@ for (var i = 0; i < 77; i++)
 
 }
 workbook.save(function(err){
-    if (err) throw err;
+    if (err) console.log("Error " + err);
     else console.log("Done");
 });
